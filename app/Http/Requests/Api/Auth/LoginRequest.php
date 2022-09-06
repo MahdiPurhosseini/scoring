@@ -2,9 +2,11 @@
 
     namespace App\Http\Requests\Api\Auth;
 
+    use App\Rules\MobileRule;
     use Illuminate\Foundation\Http\FormRequest;
     use Illuminate\Validation\Rule;
     use Illuminate\Validation\Validator;
+    use JetBrains\PhpStorm\ArrayShape;
 
 
     class LoginRequest extends FormRequest
@@ -14,7 +16,7 @@
          *
          * @return bool
          */
-        public function authorize()
+        public function authorize(): bool
         {
             return true;
         }
@@ -24,10 +26,11 @@
          *
          * @return array
          */
-        public function rules()
+        #[ArrayShape( [ 'mobile' => "array" , 'password' => "string[]" ] )]
+        public function rules(): array
         {
             return [
-                'mobile' => [ 'required' , 'digits:11' ] ,
+                'mobile' => [ 'required' , new MobileRule() ] ,
                 'password' => [ 'min:8' , "string" ] ,
             ];
         }

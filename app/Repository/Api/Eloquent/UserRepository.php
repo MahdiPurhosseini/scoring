@@ -37,30 +37,32 @@
             return $this->model->confirmed()->get();
         }
 
-        public function setScore( SetScoreRequest $request ): array
+        public function setScore( $request ): array
         {
             try {
                 DB::beginTransaction();
 
-                $user = $this->getById( $request->id );
-                $user->score += $request->score;
+                $user = $this->getById( $request["id"] );
+                $user->score += $request["score"];
                 $user->save();
 
                 DB::commit();
 
-                $message = "امتیار کاربر ثبت شد";
+                $message = __("the score added successfully");
                 event( new EventNotification( $user->id , $message ) );
                 return [
                     "status" => Response::HTTP_OK ,
-                    "message" => "امتیار کاربر ثبت شد" ,
-                    "user" => new UserResource( $user )
+                    "message" => $message ,
+                    "data" => [
+                        "user" => new UserResource( $user )
+                    ]
                 ];
             } catch ( \Exception $e ) {
                 DB::rollBack();
                 return [
                     "status" => Response::HTTP_INTERNAL_SERVER_ERROR ,
 //                    "message" => $e->getMessage() ,
-                    "message" => "مشکلی پیش آمده است"
+                    "message" => __( "there was a problem" )
                 ];
             }
         }
@@ -81,14 +83,14 @@
                 DB::commit();
                 return [
                     "status" => Response::HTTP_OK ,
-                    "message" => "کاربر با موفقیت حذف شد"
+                    "message" => __("user deleted successfully")
                 ];
             } catch ( \Exception $e ) {
                 DB::rollBack();
                 return [
                     "status" => Response::HTTP_INTERNAL_SERVER_ERROR ,
 //                    "message" => $e->getMessage() ,
-                    "message" => "مشکلی پیش آمده است"
+                    "message" => __( "there was a problem" )
                 ];
             }
         }

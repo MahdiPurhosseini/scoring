@@ -3,6 +3,7 @@
     namespace App\Http\Requests\Api\User;
 
     use Illuminate\Foundation\Http\FormRequest;
+    use JetBrains\PhpStorm\ArrayShape;
 
     class SetScoreRequest extends FormRequest
     {
@@ -11,7 +12,7 @@
          *
          * @return bool
          */
-        public function authorize()
+        public function authorize(): bool
         {
             return true;
         }
@@ -21,7 +22,8 @@
          *
          * @return array
          */
-        public function rules()
+        #[ArrayShape( [ 'id' => "string[]" , 'score' => "string[]" ] )]
+        public function rules(): array
         {
             return [
                 'id' => [ 'required' , 'exists:users,id' ] ,

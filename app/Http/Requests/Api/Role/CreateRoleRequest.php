@@ -5,6 +5,7 @@
     use Illuminate\Foundation\Http\FormRequest;
     use Illuminate\Validation\Rule;
     use Illuminate\Validation\Validator;
+    use JetBrains\PhpStorm\ArrayShape;
 
 
     class CreateRoleRequest extends FormRequest
@@ -14,7 +15,7 @@
          *
          * @return bool
          */
-        public function authorize()
+        public function authorize(): bool
         {
             return true;
         }
@@ -24,7 +25,8 @@
          *
          * @return array
          */
-        public function rules()
+        #[ ArrayShape([ 'name' => "string[]" ,'from_rate' => "string[]" , 'to_rate' => "string[]" ])]
+        public function rules(): array
         {
             return [
                 'name' => [ 'required' , "string" ] ,

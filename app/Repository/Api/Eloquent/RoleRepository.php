@@ -32,29 +32,31 @@
             return $this->model->get();
         }
 
-        public function store(CreateRoleRequest $request): mixed
+        public function store($request): array
         {
             try {
                 DB::beginTransaction();
 
                 $role = $this->model->create([
-                    "name"  => $request->name,
-                    "from_rate"  => $request->from_rate,
-                    "to_rate"  => $request->to_rate,
+                    "name"  => $request["name"],
+                    "from_rate"  => $request["from_rate"],
+                    "to_rate"  => $request["to_rate"],
                 ]);
 
                 DB::commit();
                 return [
                     "status" => Response::HTTP_OK ,
-                    "message" => "نقش با موفقیت ایجاد شد" ,
-                    "user" => new RoleResource($role)
+                    "message" => __("role created successfully") ,
+                    "data" => [
+                        "role" => new RoleResource($role)
+                    ]
                 ];
             } catch ( \Exception $e ) {
                 DB::rollBack();
                 return [
                     "status" => Response::HTTP_INTERNAL_SERVER_ERROR ,
 //                    "message" => $e->getMessage() ,
-                    "message" => "مشکلی پیش آمده است"
+                    "message" => __( "there was a problem" )
                 ];
             }
         }
@@ -75,14 +77,14 @@
                 DB::commit();
                 return [
                     "status" => Response::HTTP_OK ,
-                    "message" => "نقش با موفقیت حذف شد"
+                    "message" => __("role deleted successfully")
                 ];
             } catch ( \Exception $e ) {
                 DB::rollBack();
                 return [
                     "status" => Response::HTTP_INTERNAL_SERVER_ERROR ,
 //                    "message" => $e->getMessage() ,
-                    "message" => "مشکلی پیش آمده است"
+                    "message" => __( "there was a problem" )
                 ];
             }
         }

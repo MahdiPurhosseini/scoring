@@ -25,10 +25,10 @@
         public function getAllConfirmed(): mixed;
 
         /**
-         * @param SetScoreRequest $request
+         * @param $request
          * @return array
          */
-        public function setScore( SetScoreRequest $request ): array;
+        public function setScore( $request ): array;
 
         /**
          * @param $id

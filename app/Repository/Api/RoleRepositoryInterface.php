@@ -21,10 +21,10 @@
         public function getAll(): mixed;
 
         /**
-         * @param CreateRoleRequest $request
-         * @return mixed
+         * @param $request
+         * @return array
          */
-        public function store(CreateRoleRequest $request): mixed;
+        public function store($request): array;
 
         /**
          * @param $id

@@ -11,22 +11,22 @@
     {
 
         /**
-         * @param RegisterRequest $request
+         * @param $request
          * @return array
          */
-        public function register( RegisterRequest $request ): array;
+        public function register( $request ): array;
 
         /**
-         * @param LoginRequest $request
+         * @param $request
          * @return array
          */
-        public function login( LoginRequest $request ): array;
+        public function login( $request ): array;
 
         /**
-         * @param CheckCodeRequest $request
+         * @param $request
          * @return array
          */
-        public function checkCode( CheckCodeRequest $request ): array;
+        public function checkCode( $request ): array;
 
 
     }

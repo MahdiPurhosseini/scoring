@@ -8,3 +8,10 @@
         return 111111; // FOR TESTING
     }
 
+    function sendSmsKavenegar($mobile,$activationCode): int
+    {
+//        $api = new SendSms( 'kavenegar' );
+//        return $api->verifyLookup( $mobile , $activationCode );
+        return true;//For Test
+    }
+

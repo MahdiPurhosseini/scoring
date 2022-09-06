@@ -44,7 +44,7 @@
         public function store(CreateRoleRequest $request): JsonResponse
         {
             return response()->json(
-                $this->main->store($request)
+                $this->main->store($request->validated())
             );
         }
 

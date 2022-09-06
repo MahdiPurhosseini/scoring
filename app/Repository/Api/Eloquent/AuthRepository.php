@@ -27,7 +27,7 @@
             $this->model = $model;
         }
 
-        public function register( RegisterRequest $request ): array
+        public function register( $request ): array
         {
             try {
                 DB::beginTransaction();
@@ -35,53 +35,49 @@
                 $activationCode = getActivationCode();
 
                 $user = User::create( [
-                    'first_name' => $request->first_name ,
-                    'last_name' => $request->last_name ,
-                    'email' => $request->email ,
-                    'mobile' => $request->mobile ,
+                    'first_name' => $request[ 'first_name' ] ,
+                    'last_name' => $request[ 'last_name' ] ,
+                    'email' => $request[ 'email' ] ,
+                    'mobile' => $request[ 'mobile' ] ,
                     'mobile_activation_code' => $activationCode ,
                     'time_activation_code' => Carbon::now() ,
-                    'password' => Hash::make( $request->password ) ,
+                    'password' => Hash::make( $request[ 'password' ] ) ,
                 ] );
 
-                //TODO send activation_code for user
-
-//                $api = new SendSms( 'kavenegar' );
-//                $result = $api->verifyLookup( $user->mobile , $user->mobile_activation_code );
-
-                $result = true; //For Testing
+                $result = sendSmsKavenegar( $user->mobile , $user->mobile_activation_code );
 
                 if ( ! $result ) {
                     return [
                         "status" => Response::HTTP_INTERNAL_SERVER_ERROR ,
-                        "message" => "ارسال کد تایید با مشکل رو به رو شد"
+                        "message" => __( "there was a problem for sending the code" )
                     ];
                 }
 
                 DB::commit();
 
-                $message = "ثبت نام شما با موفقیت انجام شد و کد تایید برای شما ارسال گردید";
+                $message = __( "you registered successfully and active code send to you" );
                 event( new EventNotification( $user->id , $message ) );
                 return [
                     "status" => Response::HTTP_OK ,
                     "message" => $message ,
-                    "user" => new UserResource( $user )
+                    "data" => [
+                        "user" => new UserResource( $user )
+                    ]
                 ];
             } catch ( \Exception $e ) {
                 DB::rollBack();
                 return [
                     "status" => Response::HTTP_INTERNAL_SERVER_ERROR ,
 //                    "message" => $e->getMessage() ,
-                    "message" => "مشکلی پیش آمده است"
+                    "message" => __( "there was a problem" )
                 ];
             }
 
         }
 
-        public function login( LoginRequest $request ): array
+        public function login( $request ): array
         {
-            $validated = $request->validated();
-            if ( Auth::attempt( [ 'mobile' => $validated[ 'mobile' ] , 'password' => $validated[ 'password' ] ] ) ) {
+            if ( Auth::attempt( [ 'mobile' => $request[ 'mobile' ] , 'password' => $request[ 'password' ] ] ) ) {
                 $user = Auth::user();
 
                 if ( $user->mobile_verified_at == null ) {
@@ -95,29 +91,30 @@
                     'time_activation_code' => null ,
                 ] );
 
-                $message = "شما با موفقیت لاگین شدید";
+                $message = __( "you logged in successfully" );
                 event( new EventNotification( $user->id , $message ) );
                 return [
                     'status' => Response::HTTP_OK ,
                     'message' => $message ,
-                    'token' => $token->token ,
-                    'user' => new UserResource( Auth::user() ) ,
+                    "data" => [
+                        'token' => $token->token ,
+                        "user" => new UserResource( $user )
+                    ]
                 ];
             } else {
                 return [
                     'status' => Response::HTTP_NOT_FOUND ,
-                    'message' => "تلفن همراه یا پسورد شما اشتباه است" ,
+                    'message' => __( "your mobile or password is wrong" ) ,
                 ];
             }
         }
 
-        public function checkCode( CheckCodeRequest $request ): array
+        public function checkCode( $request ): array
         {
             try {
                 DB::beginTransaction();
 
-                $validated = $request->validated();
-                $user = User::where( [ 'mobile' => $validated[ 'mobile' ] , 'mobile_activation_code' => (int) $validated[ 'active_code' ] , "mobile_verified_at" => null ] )->first();
+                $user = User::where( [ 'mobile' => $request[ 'mobile' ] , 'mobile_activation_code' => (int) $request[ 'active_code' ] , "mobile_verified_at" => null ] )->first();
                 if ( $user != null ) {
 
                     $user->update( [
@@ -127,18 +124,20 @@
                     ] );
                     DB::commit();
 
-                    $message = "شما با موفقیت تایید شدید";
+                    $message = __( "you activated successfully" );
                     event( new EventNotification( $user->id , $message ) );
                     return [
                         'status' => Response::HTTP_OK ,
                         'message' => $message ,
-                        'user' => new UserResource( $user ) ,
+                        "data" => [
+                            "user" => new UserResource( $user )
+                        ]
                     ];
 
                 } else {
                     return [
                         'status' => Response::HTTP_NOT_FOUND ,
-                        'message' => "کد تایید وارد شده اشتباه است" ,
+                        'message' => __( "the active code is wrong" ) ,
                     ];
                 }
 
@@ -146,8 +145,8 @@
                 DB::rollBack();
                 return [
                     "status" => Response::HTTP_INTERNAL_SERVER_ERROR ,
-                    "message" => $e->getMessage() ,
-//                    "message" => "مشکلی پیش آمده است"
+//                    "message" => $e->getMessage() ,
+                    "message" => __( "there was a problem" )
                 ];
             }
         }
@@ -156,14 +155,8 @@
         {
             if ( $user->time_activation_code == null or Carbon::now() > Carbon::create( $user->time_activation_code )->addMinutes( 2 ) ) {
 
-//             TODO active kavenegar for sending code
-
-//             $activationCode = getActivationCode();
-//             $api = new SendSms( 'kavenegar' );
-//             $result = $api->verifyLookup( $user->mobile , $activationCode );
-
                 $activationCode = getActivationCode();
-                $result = true;
+                $result = sendSmsKavenegar( $user->mobile , $activationCode );
 
                 if ( $result ) {
                     $user->update( [
@@ -173,20 +166,22 @@
                     DB::commit();
                     return [
                         'status' => Response::HTTP_OK ,
-                        'message' => "کد تایید جهت فعال کردن حساب کاربری برای شما ارسال شد" ,
-                        'user' => new UserResource( $user )
+                        'message' => __( "the active code send for you" ) ,
+                        "data" => [
+                            "user" => new UserResource( $user )
+                        ]
                     ];
                 } else {
                     return [
                         'status' => Response::HTTP_INTERNAL_SERVER_ERROR ,
-                        'message' => "درارسال کد تایید جهت فعال کردن حساب کاربری مشکلی ایجاد، مجددا تلاتش کنید"
+                        'message' => __( "there was a problem for sending active code for you" )
                     ];
                 }
 
             } else {
                 return [
                     'status' => Response::HTTP_BAD_REQUEST ,
-                    'message' => "کد تایید جهت فعال کردن حساب کاربری برای شما ارسال شده است، بعد از 2 دقیقه دوباره تلاش نمایید"
+                    'message' => __( "the active code was sent for you, try again 2 minutes later" )
                 ];
             }
         }

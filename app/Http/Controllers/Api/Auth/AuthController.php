@@ -7,7 +7,6 @@
     use App\Http\Requests\Api\Auth\CheckCodeRequest;
     use App\Http\Requests\Api\Auth\LoginRequest;
     use App\Http\Requests\Api\Auth\RegisterRequest;
-    use App\Http\Requests\Api\Auth\SendCodeRequest;
     use App\Repository\Api\Eloquent\AuthRepository;
     use Illuminate\Http\JsonResponse;
 
@@ -25,7 +24,7 @@
         public function register( RegisterRequest $request ): JsonResponse
         {
             return response()->json(
-                $this->main->register( $request )
+                $this->main->register( $request->validated() )
             );
         }
 

@@ -6,10 +6,8 @@
     use App\Http\Requests\Api\User\SetScoreRequest;
     use App\Http\Resources\User\UserCollection;
     use App\Http\Resources\User\UserResource;
-    use App\Repository\Api\Eloquent\NotificationRepository;
     use App\Repository\Api\Eloquent\UserRepository;
     use Illuminate\Http\JsonResponse;
-    use Illuminate\Http\Request;
     use Symfony\Component\HttpFoundation\Response;
 
     class UserController extends Controller
@@ -45,7 +43,7 @@
         public function score(SetScoreRequest $request): JsonResponse
         {
             return response()->json(
-                $this->main->setScore($request)
+                $this->main->setScore($request->validated())
             );
         }
 
