@@ -8,6 +8,7 @@
     use App\Http\Requests\Api\Auth\LoginRequest;
     use App\Http\Requests\Api\Auth\RegisterRequest;
     use App\Repository\Api\Eloquent\AuthRepository;
+    use App\Repository\Api\Eloquent\NotificationRepository;
     use Illuminate\Http\JsonResponse;
 
 

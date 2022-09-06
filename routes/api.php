@@ -39,5 +39,5 @@
 
     } );
 
-    Route::post('user-device/register', [UserDeviceAPIController::class, 'registerDevice']);
+    Route::post('user-device/register', [UserDeviceAPIController::class, 'registerDevice'])->name('registerDevice');
     Route::get('user-device/{playerId}/update-status', [UserDeviceAPIController::class, 'updateNotificationStatus']);

@@ -19,13 +19,15 @@ class UserDeviceRepository
     public function updateOrCreate($input): UserDevice
     {
         try {
-            return UserDevice::updateOrCreate([
-                'os_player_id' => $input['os_player_id'],
-            ], [
-                'user_id' => auth()->user()->id,
-                'os_player_id' => $input['os_player_id'],
-                'device_type' => $input['device_type']
-            ]);
+            if (auth()->check()){
+                return UserDevice::updateOrCreate([
+                    'os_player_id' => $input['os_player_id'],
+                ], [
+                    'user_id' => $input[ 'user_id' ] ?? auth()->user()->id ,
+                    'os_player_id' => $input['os_player_id'],
+                    'device_type' => $input['device_type']
+                ]);
+            }
         } catch (Exception $e) {
             throw new UnprocessableEntityHttpException($e->getMessage());
         }

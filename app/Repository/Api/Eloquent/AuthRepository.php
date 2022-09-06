@@ -56,7 +56,8 @@
                 DB::commit();
 
                 $message = __( "you registered successfully and active code send to you" );
-                event( new EventNotification( $user->id , $message ) );
+                event( new EventNotification( $user , $message ) );
+
                 return [
                     "status" => Response::HTTP_OK ,
                     "message" => $message ,
@@ -92,7 +93,7 @@
                 ] );
 
                 $message = __( "you logged in successfully" );
-                event( new EventNotification( $user->id , $message ) );
+                event( new EventNotification( $user , $message ) );
                 return [
                     'status' => Response::HTTP_OK ,
                     'message' => $message ,
@@ -125,7 +126,7 @@
                     DB::commit();
 
                     $message = __( "you activated successfully" );
-                    event( new EventNotification( $user->id , $message ) );
+                    event( new EventNotification( $user , $message ) );
                     return [
                         'status' => Response::HTTP_OK ,
                         'message' => $message ,

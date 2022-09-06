@@ -8,32 +8,24 @@
     {
 
         /**
-         * @param $player_id
+         * @param $user_id
          * @param $message
          * @param array $content
          */
-        public function sendPush( $player_id , $message , array $content = [] );
+        public function sendPush( $user_id , $message , array $content = [] );
 
-        /**
-         * @return OneSignal
-         */
-        public function getNotifications(): OneSignal;
+        public function getNotifications();
 
         /**
          * @param $notificationId
-         * @return OneSignal
          */
-        public function getNotification($notificationId): OneSignal;
+        public function getNotification($notificationId);
 
-        /**
-         * @return OneSignal
-         */
-        public function getDevices(): OneSignal;
+        public function getDevices();
 
         /**
          * @param $deviceId
-         * @return OneSignal
          */
-        public function getDevice( $deviceId ): OneSignal;
+        public function getDevice( $deviceId );
 
     }

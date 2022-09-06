@@ -28,7 +28,7 @@ class UserDeviceAPIController extends Controller
      */
     public function registerDevice(Request $request): JsonResponse
     {
-        $this->userDeviceRepo->updateOrCreate($request->all());
+        $this->userDeviceRepo->updateOrCreate($request->toArray());
 
         return $this->sendSuccess('The device has been registered successfully.');
     }
