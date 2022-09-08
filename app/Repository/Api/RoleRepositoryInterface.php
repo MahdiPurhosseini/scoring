@@ -2,9 +2,7 @@
 
     namespace App\Repository\Api;
 
-    use App\Http\Requests\Api\Role\CreateRoleRequest;
     use App\Models\Role;
-    use Illuminate\Http\Request;
 
     interface RoleRepositoryInterface
     {

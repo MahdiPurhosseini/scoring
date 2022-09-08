@@ -8,7 +8,6 @@
     use App\Http\Resources\Role\RoleResource;
     use App\Repository\Api\Eloquent\RoleRepository;
     use Illuminate\Http\JsonResponse;
-    use Illuminate\Http\Request;
     use Symfony\Component\HttpFoundation\Response;
 
     class RoleController extends Controller

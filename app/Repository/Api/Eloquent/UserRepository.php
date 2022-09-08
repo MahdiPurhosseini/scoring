@@ -3,7 +3,6 @@
     namespace App\Repository\Api\Eloquent;
 
     use App\Events\EventNotification;
-    use App\Http\Requests\Api\User\SetScoreRequest;
     use App\Http\Resources\User\UserResource;
     use App\Models\User;
     use App\Repository\Api\UserRepositoryInterface;

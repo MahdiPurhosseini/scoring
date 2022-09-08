@@ -3,10 +3,6 @@
     namespace App\Repository\Api\Eloquent;
 
     use App\Events\EventNotification;
-    use App\Helper\SendSms;
-    use App\Http\Requests\Api\Auth\CheckCodeRequest;
-    use App\Http\Requests\Api\Auth\LoginRequest;
-    use App\Http\Requests\Api\Auth\RegisterRequest;
     use App\Http\Resources\User\UserResource;
     use App\Models\User;
     use App\Repository\Api\AuthRepositoryInterface;

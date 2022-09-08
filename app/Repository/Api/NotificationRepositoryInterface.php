@@ -2,8 +2,6 @@
 
     namespace App\Repository\Api;
 
-    use Ladumor\OneSignal\OneSignal;
-
     interface NotificationRepositoryInterface
     {
 

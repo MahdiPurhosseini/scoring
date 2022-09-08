@@ -2,9 +2,7 @@
 
     namespace App\Repository\Api\Eloquent;
 
-    use App\Http\Requests\Api\Role\CreateRoleRequest;
     use App\Http\Resources\Role\RoleResource;
-    use App\Http\Resources\User\UserResource;
     use App\Models\Role;
     use App\Repository\Api\RoleRepositoryInterface;
     use Illuminate\Support\Facades\DB;

@@ -2,7 +2,6 @@
 
     namespace App\Repository\Api;
 
-    use App\Http\Requests\Api\User\SetScoreRequest;
     use App\Models\User;
 
     interface UserRepositoryInterface

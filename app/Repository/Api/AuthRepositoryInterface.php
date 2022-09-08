@@ -2,9 +2,6 @@
 
     namespace App\Repository\Api;
 
-    use App\Http\Requests\Api\Auth\CheckCodeRequest;
-    use App\Http\Requests\Api\Auth\LoginRequest;
-    use App\Http\Requests\Api\Auth\RegisterRequest;
     use App\Http\Requests\Api\Auth\SendCodeRequest;
 
     interface AuthRepositoryInterface
